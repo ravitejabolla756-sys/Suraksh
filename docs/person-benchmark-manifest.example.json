@@ -1,0 +1,28 @@
+{
+  "name": "suraksh-rights-approved-cctv-v1",
+  "version": "1.0.0",
+  "provenance": "Replace with collection owner and acquisition record",
+  "license": "Replace with the exact license or written permission reference",
+  "intended_use_permitted": true,
+  "frames": [
+    {
+      "video_path": "media/camera-01.mp4",
+      "camera_id": "camera-01",
+      "frame_index": 30,
+      "source_timestamp": 1.0,
+      "source_fps": 30.0,
+      "tags": ["night", "outdoor", "crowded"],
+      "objects": [
+        {
+          "class_id": 0,
+          "class_name": "person",
+          "bbox_xyxy": [120.0, 80.0, 142.0, 138.0],
+          "track_id": "anonymous-gt-17",
+          "occluded": true,
+          "visibility": 0.63,
+          "tags": ["small", "walking"]
+        }
+      ]
+    }
+  ]
+}

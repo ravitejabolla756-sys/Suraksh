@@ -1,0 +1,3 @@
+# Optional production/demo analytics dependencies.
+ultralytics==8.3.40
+paddleocr==2.9.1

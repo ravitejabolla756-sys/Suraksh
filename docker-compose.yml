@@ -1,0 +1,95 @@
+services:
+  postgres:
+    image: postgis/postgis:15-3.4-alpine
+    environment:
+      POSTGRES_DB: visionguard
+      POSTGRES_USER: visionguard
+      POSTGRES_PASSWORD: visionguard
+    ports:
+      - "5432:5432"
+    volumes:
+      - visionguard_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U visionguard"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      VISIONGUARD_DATABASE_URL: postgresql+psycopg://visionguard:visionguard@postgres:5432/visionguard
+      VISIONGUARD_JWT_SECRET: ${VISIONGUARD_JWT_SECRET:?Set VISIONGUARD_JWT_SECRET in .env}
+      VISIONGUARD_EDGE_INGEST_KEY: ${VISIONGUARD_EDGE_INGEST_KEY_HASH:?Set VISIONGUARD_EDGE_INGEST_KEY_HASH in .env}
+      VISIONGUARD_CORS_ORIGINS: http://localhost:3000
+      VISIONGUARD_PUBLIC_DASHBOARD_URL: http://localhost:3000
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  edge-ai:
+    build:
+      context: ./edge-ai
+    depends_on:
+      - backend
+    volumes:
+      - ./edge-ai/data:/app/data
+    environment:
+      SURAKSH_EDGE_INGEST_KEY: ${SURAKSH_EDGE_INGEST_KEY:?Set SURAKSH_EDGE_INGEST_KEY in .env}
+
+  mediamtx:
+    image: bluenviron/mediamtx:1.9.3
+    ports:
+      - "8554:8554"
+      - "8888:8888"
+      - "8889:8889"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8888/" ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  stream-vms-a:
+    image: jrottenberg/ffmpeg:6.0-ubuntu
+    depends_on:
+      mediamtx:
+        condition: service_healthy
+    command: ["-re", "-f", "lavfi", "-i", "testsrc=size=640x360:rate=15", "-an", "-c:v", "libx264", "-preset", "ultrafast", "-tune", "zerolatency", "-f", "rtsp", "rtsp://mediamtx:8554/vms-a"]
+
+  stream-vms-b:
+    image: jrottenberg/ffmpeg:6.0-ubuntu
+    depends_on:
+      mediamtx:
+        condition: service_healthy
+    command: ["-re", "-f", "lavfi", "-i", "color=c=darkgreen:size=640x360:rate=15", "-an", "-c:v", "libx264", "-preset", "ultrafast", "-tune", "zerolatency", "-f", "rtsp", "rtsp://mediamtx:8554/vms-b"]
+
+  vms-a:
+    build: ./simulators/vms-a
+    ports:
+      - "8091:8091"
+
+  vms-b:
+    build: ./simulators/vms-b
+    ports:
+      - "8092:8092"
+
+volumes:
+  visionguard_pg:

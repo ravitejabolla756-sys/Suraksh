@@ -1,0 +1,22 @@
+{
+  "before": {
+    "alerts": [
+      "3ba5c7ab-06b9-4c92-b510-a946c67300cd"
+    ],
+    "last": "",
+    "state": "CONNECTED",
+    "url": "http://127.0.0.1:3000/alerts"
+  },
+  "after": {
+    "alerts": [
+      "1f5346ff-65b5-4220-bdd1-d2271c66ac9b",
+      "e12b3176-5c72-4f5e-9960-3045398f3e29",
+      "3ba5c7ab-06b9-4c92-b510-a946c67300cd"
+    ],
+    "automatic": true,
+    "last": "1f5346ff-65b5-4220-bdd1-d2271c66ac9b",
+    "state": "CONNECTED",
+    "url": "http://127.0.0.1:3000/alerts"
+  },
+  "method": "Same open browser tab; no navigation or reload between before and after; E2E invoked through the local shell"
+}

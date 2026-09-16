@@ -1,0 +1,21 @@
+org_id: org_demo_school
+edge_server_id: edge_demo_01
+backend_url: http://127.0.0.1:8000
+poll_seconds: 8
+ingest_key: ""
+sources:
+  - camera_id: cam_gate_1
+    department_id: dept_home_demo
+    name: Gate 1
+    source_url: demo://gate-1
+    zones:
+      - id: zone_gate_entry
+        type: restricted
+  - camera_id: cam_hallway
+    department_id: dept_transport_demo
+    name: Main Hallway
+    source_url: demo://hallway
+    zones:
+      - id: zone_hallway_crowd
+        type: corridor
+        crowd_threshold: 35
