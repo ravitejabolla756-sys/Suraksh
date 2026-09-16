@@ -197,7 +197,17 @@ Create a focused branch, keep changes scoped, run the relevant backend, Edge and
 
 ## License
 
-No license has been specified in the current repository. Until one is added by the project owner, reuse and redistribution terms are unspecified.
+SURAKSH is released under the MIT License.
+
+See the [LICENSE](LICENSE) file for the complete license text.
+
+## Third-Party Licenses
+
+The MIT License applies to the SURAKSH project code owned by the project authors.
+
+Third-party software, AI models, datasets, pretrained weights, libraries, media, and other external assets may be subject to their own licenses and terms. Their respective licenses remain applicable.
+
+The repository identifies the Ultralytics detector integration as AGPL-3.0-or-later and requires a separate enterprise-license review for proprietary deployment. Model checkpoints, OCR packages, FFmpeg images, datasets and other external assets require review of their own license terms before redistribution or deployment. No ownership or MIT licensing is claimed for those materials.
 
 ## Disclaimer
 
